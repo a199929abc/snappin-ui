@@ -97,11 +97,29 @@ export interface GalleryPhoto {
   confidence: number
 }
 
+export interface GalleryEvent {
+  id: string
+  name: string
+  description?: string
+  status: string
+  start_time?: string
+  end_time?: string
+  location?: string
+  banner?: {
+    id: string
+    filename: string
+    url: string
+    width: number
+    height: number
+  }
+}
+
 export interface GalleryResponse {
   photos: GalleryPhoto[]
   user: {
     name: string
     totalPhotos: number
   }
+  event?: GalleryEvent | null
   retentionDays: number
 } 
