@@ -1,0 +1,634 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Snappin API",
+    "version": "1.0.0",
+    "description": "Snappin人脸识别照片库系统API"
+  },
+  "servers": [
+    {
+      "url": "https://localhost:8080",
+      "description": "开发服务器"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/api/health": {
+      "get": {
+        "summary": "健康检查",
+        "tags": ["Health"],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "服务正常",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "healthy" },
+                    "message": { "type": "string", "example": "Service is running" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/register": {
+      "post": {
+        "summary": "管理员注册",
+        "tags": ["Authentication"],
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password", "name", "organization_name"],
+                "properties": {
+                  "email": { "type": "string", "format": "email" },
+                  "password": { "type": "string", "minLength": 3 },
+                  "name": { "type": "string" },
+                  "organization_name": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "注册成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": { "type": "string" },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "string" },
+                        "email": { "type": "string" },
+                        "name": { "type": "string" },
+                        "organization": { "type": "object" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/login": {
+      "post": {
+        "summary": "管理员登录",
+        "tags": ["Authentication"],
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": { "type": "string", "format": "email" },
+                  "password": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "登录成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": { "type": "string" },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "string" },
+                        "email": { "type": "string" },
+                        "name": { "type": "string" },
+                        "organization": { "type": "object" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organizations": {
+      "get": {
+        "summary": "获取组织列表",
+        "tags": ["Organizations"],
+        "responses": {
+          "200": {
+            "description": "成功获取组织列表",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "name": { "type": "string" },
+                      "description": { "type": "string" },
+                      "status": { "type": "string" },
+                      "created_at": { "type": "string", "format": "date-time" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organizations/{org_id}": {
+      "get": {
+        "summary": "获取组织详情",
+        "tags": ["Organizations"],
+        "parameters": [
+          {
+            "name": "org_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功获取组织详情"
+          }
+        }
+      },
+      "put": {
+        "summary": "更新组织信息",
+        "tags": ["Organizations"],
+        "parameters": [
+          {
+            "name": "org_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "description": { "type": "string" },
+                  "status": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "更新成功"
+          }
+        }
+      }
+    },
+    "/api/events": {
+      "get": {
+        "summary": "获取事件列表",
+        "tags": ["Events"],
+        "parameters": [
+          {
+            "name": "include_past",
+            "in": "query",
+            "schema": { "type": "boolean", "default": false }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功获取事件列表",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "name": { "type": "string" },
+                      "description": { "type": "string" },
+                      "slug": { "type": "string" },
+                      "start_time": { "type": "string", "format": "date-time" },
+                      "end_time": { "type": "string", "format": "date-time" },
+                      "location": { "type": "string" },
+                      "max_participants": { "type": "integer" },
+                      "current_participants": { "type": "integer" },
+                      "registration_enabled": { "type": "boolean" },
+                      "status": { "type": "string" },
+                      "creator_id": { "type": "string" },
+                      "organization_id": { "type": "string" },
+                      "is_full": { "type": "boolean" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "创建新事件",
+        "tags": ["Events"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                  "name": { "type": "string" },
+                  "description": { "type": "string" },
+                  "start_time": { "type": "string", "format": "date-time" },
+                  "end_time": { "type": "string", "format": "date-time" },
+                  "location": { "type": "string" },
+                  "max_participants": { "type": "integer" },
+                  "settings": { "type": "object" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "事件创建成功"
+          }
+        }
+      }
+    },
+    "/api/events/{event_id}": {
+      "get": {
+        "summary": "获取事件详情",
+        "tags": ["Events"],
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功获取事件详情"
+          }
+        }
+      },
+      "put": {
+        "summary": "更新事件信息",
+        "tags": ["Events"],
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "更新成功"
+          }
+        }
+      },
+      "delete": {
+        "summary": "删除事件",
+        "tags": ["Events"],
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "删除成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/events/{event_id}/registration-url": {
+      "get": {
+        "summary": "获取事件注册URL",
+        "tags": ["Events"],
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功获取注册URL",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "registration_url": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/photos/upload": {
+      "post": {
+        "summary": "上传单张照片",
+        "tags": ["Photos"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["photo", "photographer_id"],
+                "properties": {
+                  "photo": { "type": "string", "format": "binary" },
+                  "photographer_id": { "type": "string" },
+                  "event_id": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "照片上传成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "message": { "type": "string" },
+                    "photo_id": { "type": "string" },
+                    "url": { "type": "string" },
+                    "matches": { "type": "integer" },
+                    "matched_users": { "type": "array" },
+                    "gallery_links": { "type": "array" },
+                    "is_duplicate": { "type": "boolean" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/photos/batch-upload": {
+      "post": {
+        "summary": "批量上传照片",
+        "tags": ["Photos"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["photos", "photographer_id"],
+                "properties": {
+                  "photos": { 
+                    "type": "array",
+                    "items": { "type": "string", "format": "binary" }
+                  },
+                  "photographer_id": { "type": "string" },
+                  "event_id": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "照片批量上传成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "photo_id": { "type": "string" },
+                          "matches": { "type": "integer" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/u/{code}": {
+      "get": {
+        "summary": "通过短链接访问图库",
+        "tags": ["Gallery"],
+        "security": [],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "schema": { 
+              "type": "string", 
+              "enum": ["all", "enhanced", "favorites"],
+              "default": "all"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功获取图库数据",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "photos": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "string" },
+                          "filename": { "type": "string" },
+                          "thumbnailUrl": { "type": "string" },
+                          "downloadUrl": { "type": "string" },
+                          "width": { "type": "integer" },
+                          "height": { "type": "integer" },
+                          "confidence": { "type": "number" }
+                        }
+                      }
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "name": { "type": "string" },
+                        "totalPhotos": { "type": "integer" }
+                      }
+                    },
+                    "retentionDays": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/event/{slug}/register": {
+      "get": {
+        "summary": "获取事件注册信息",
+        "tags": ["Event Registration"],
+        "security": [],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功获取事件注册信息",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "event": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "string" },
+                        "name": { "type": "string" },
+                        "description": { "type": "string" },
+                        "slug": { "type": "string" },
+                        "max_participants": { "type": "integer" },
+                        "current_participants": { "type": "integer" },
+                        "is_full": { "type": "boolean" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "注册参加事件",
+        "tags": ["Event Registration"],
+        "security": [],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "email", "photo"],
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string", "format": "email" },
+                  "phone": { "type": "string" },
+                  "instagram": { "type": "string" },
+                  "photo": { "type": "string", "format": "binary" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "注册成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "user_id": { "type": "string" },
+                    "event_id": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+} 
