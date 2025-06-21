@@ -33,6 +33,7 @@
     "yup": "^1.6.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.29.0",
     "@types/imagesloaded": "^4.1.7",
     "@types/node": "^22.15.21",
     "@types/react": "^18.2.37",
@@ -41,12 +42,15 @@
     "@typescript-eslint/parser": "^6.10.0",
     "@vitejs/plugin-react": "^4.1.1",
     "autoprefixer": "^10.4.16",
-    "eslint": "^8.53.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.4",
+    "globals": "^16.2.0",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.5",
     "typescript": "^5.2.2",
+    "typescript-eslint": "^8.34.1",
     "vite": "^4.5.0",
     "vite-plugin-rewrite-all": "^1.0.2"
   },
