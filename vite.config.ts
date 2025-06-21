@@ -8,6 +8,10 @@ export default defineConfig(({ mode }) => {
   // Load env file based on `mode` in the current working directory.
   const env = loadEnv(mode, process.cwd(), '')
   
+  // 检查SSL证书文件是否存在（仅本地开发需要）
+  const sslKeyExists = fs.existsSync('localhost+2-key.pem')
+  const sslCertExists = fs.existsSync('localhost+2.pem')
+  
   return {
     plugins: [
       react(),
@@ -46,10 +50,13 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3000,
       host: true, // Enable access from network
-      https: {
-        key: fs.readFileSync('localhost+2-key.pem'),
-        cert: fs.readFileSync('localhost+2.pem'),
-      },
+      // 只在开发环境且SSL证书存在时启用HTTPS
+      ...(mode === 'development' && sslKeyExists && sslCertExists ? {
+        https: {
+          key: fs.readFileSync('localhost+2-key.pem'),
+          cert: fs.readFileSync('localhost+2.pem'),
+        }
+      } : {}),
       proxy: {
         '/api': {
           target: 'https://localhost:8080',
