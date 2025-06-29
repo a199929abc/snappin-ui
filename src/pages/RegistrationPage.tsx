@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { Button, Box, Container, Typography } from '@mui/material'
+import { Button, Box, Container, Typography, Card, CardContent } from '@mui/material'
+import { CalendarToday, LocationOn } from '@mui/icons-material'
 import { StepIndicator } from '@/components/registration/StepIndicator'
 import { BasicInfoStep } from '@/components/registration/BasicInfoStep'
 import { OTPVerificationStep } from '@/components/registration/OTPVerificationStep'
@@ -8,7 +9,6 @@ import { FaceRegistrationStep } from '@/components/registration/FaceRegistration
 import { CompletionStep } from '@/components/registration/CompletionStep'
 import { RegistrationData } from '@/types/registration'
 import { apiService, EventInfo } from '@/services/api'
-import { PageLayout } from '@/components/shared/PageLayout'
 import { ErrorDisplay } from '@/components/shared/StatusComponents'
 
 export const RegistrationPage = () => {
@@ -30,15 +30,21 @@ export const RegistrationPage = () => {
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [otpError, setOtpError] = useState<string | null>(null)
   
-  // Event-related states (for backend validation only, not displayed)  
-  const [, setEventInfo] = useState<EventInfo | null>(null)
+  // Event-related states
+  const [eventInfo, setEventInfo] = useState<EventInfo | null>(null)
   const [eventError, setEventError] = useState<string | null>(null)
+  const [bannerLoaded, setBannerLoaded] = useState(false)
+  const [bannerError, setBannerError] = useState(false)
 
   const totalSteps = 3
 
   // Load event info if slug is provided (silently in background)
   useEffect(() => {
     if (slug) {
+      // Reset banner states
+      setBannerLoaded(false)
+      setBannerError(false)
+      
       apiService.getEventInfo(slug)
         .then((event) => {
           setEventInfo(event)
@@ -169,104 +175,121 @@ export const RegistrationPage = () => {
     }
   }
 
-  const renderBottomButton = () => {
-    // 底部按钮容器统一样式
-    const buttonContainerStyle = {
-      maxWidth: '400px',
-      mx: 'auto',
-      width: '100%',
-      px: { xs: 2, sm: 3 },
+  // Format date for display
+  const formatEventDate = (dateString?: string) => {
+    if (!dateString) return null
+    try {
+      const date = new Date(dateString)
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric'
+      })
+    } catch {
+      return null
     }
+  }
 
-    // 按钮统一样式
+  const renderBottomButton = () => {
+    // 按钮统一样式 - 渐变效果
     const buttonStyle = {
-      py: 1.2,
+      py: 1,
       px: 3,
       fontSize: '0.95rem',
       fontWeight: 600,
       borderRadius: 2,
       textTransform: 'none',
-      minHeight: 44,
-      maxWidth: 400,
-      mx: 'auto',
+      height: 44,
+      background: 'linear-gradient(135deg, #1976d2 0%, #3f51b5 100%)',
+      '&:hover': {
+        background: 'linear-gradient(135deg, #1565c0 0%, #303f9f 100%)',
+        transform: 'translateY(-1px)',
+        boxShadow: '0 8px 25px rgba(25, 118, 210, 0.3)',
+      },
+      '&:disabled': {
+        background: '#e0e0e0',
+        transform: 'none',
+        boxShadow: 'none',
+      },
+      transition: 'all 0.2s ease-in-out',
+    }
+
+    const outlineButtonStyle = {
+      py: 1,
+      px: 3,
+      fontSize: '0.95rem',
+      fontWeight: 600,
+      borderRadius: 2,
+      textTransform: 'none',
+      height: 44,
+      borderColor: '#1976d2',
+      color: '#1976d2',
+      '&:hover': {
+        borderColor: '#1565c0',
+        backgroundColor: 'rgba(25, 118, 210, 0.04)',
+        transform: 'translateY(-1px)',
+      },
+      transition: 'all 0.2s ease-in-out',
     }
 
     switch (currentStep) {
       case 1:
         return (
-          <Box sx={buttonContainerStyle}>
-            <Button
-              onClick={handleNext}
-              fullWidth
-              variant="contained"
-              size="large"
-              disabled={!isFormValid}
-              sx={buttonStyle}
-            >
-              Continue
-            </Button>
-          </Box>
+          <Button
+            onClick={handleNext}
+            fullWidth
+            variant="contained"
+            size="medium"
+            disabled={!isFormValid}
+            sx={buttonStyle}
+          >
+            Continue
+          </Button>
         )
       case 2:
-        // OTP step - only Back button, auto-advances on success
         return (
-          <Box sx={buttonContainerStyle}>
-            <Button
-              onClick={handleBack}
-              variant="outlined"
-              size="large"
-              sx={buttonStyle}
-            >
-              Back
-            </Button>
-          </Box>
+          <Button
+            onClick={handleBack}
+            variant="outlined"
+            size="medium"
+            sx={outlineButtonStyle}
+          >
+            Back
+          </Button>
         )
       case 3:
         return (
-          <Box sx={buttonContainerStyle}>
-            <Box sx={{ display: 'flex', gap: { xs: 1.5, sm: 2 } }}>
-              <Button
-                onClick={handleBack}
-                variant="outlined"
-                size="large"
-                disabled={isSubmitting}
-                sx={{
-                  ...buttonStyle,
-                  flex: 1,
-                  minWidth: 0,
-                }}
-              >
-                Back
-              </Button>
-              <Button
-                onClick={handleNext}
-                variant="contained"
-                size="large"
-                disabled={!isFormValid || isSubmitting}
-                sx={{
-                  ...buttonStyle,
-                  flex: 2, // Submit button is wider
-                  minWidth: 0,
-                }}
-              >
-                Submit Registration
-              </Button>
-            </Box>
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <Button
+              onClick={handleBack}
+              variant="outlined"
+              size="medium"
+              disabled={isSubmitting}
+              sx={{ ...outlineButtonStyle, flex: 1 }}
+            >
+              Back
+            </Button>
+            <Button
+              onClick={handleNext}
+              variant="contained"
+              size="medium"
+              disabled={!isFormValid || isSubmitting}
+              sx={{ ...buttonStyle, flex: 2 }}
+            >
+              Submit Registration
+            </Button>
           </Box>
         )
       case 4:
         return (
-          <Box sx={buttonContainerStyle}>
-            <Button
-              onClick={() => window.location.href = import.meta.env.VITE_COMPANY_WEBSITE || 'https://www.snappin.ca'}
-              fullWidth
-              variant="contained"
-              size="large"
-              sx={buttonStyle}
-            >
-              Close
-            </Button>
-          </Box>
+          <Button
+            onClick={() => window.location.href = import.meta.env.VITE_COMPANY_WEBSITE || 'https://www.snappin.ca'}
+            fullWidth
+            variant="contained"
+            size="medium"
+            sx={buttonStyle}
+          >
+            Close
+          </Button>
         )
       default:
         return null
@@ -280,132 +303,254 @@ export const RegistrationPage = () => {
   }
 
   return (
-    <PageLayout 
-      maxWidth="md"
-      showHeader={false}
-      showBottomActions={true}
-      isLoading={isSubmitting}
-      bottomActionsContent={renderBottomButton()}
-    >
-      {/* 双层Container实现宽度控制 */}
-      <Container 
-        maxWidth={false}
-        sx={{ 
-          maxWidth: '600px',
-          mx: 'auto',
-          px: { xs: 2, sm: 3, md: 4 },
-          display: 'flex', 
-          flexDirection: 'column', 
-          minHeight: { xs: '75vh', sm: '78vh', md: '80vh' }
-        }}
-      >
-        {/* 第1层：品牌层 - 独立24px间距 */}
-        <Box sx={{ 
-          textAlign: 'left', 
-          mb: 3, // 固定24px间距
-          pt: 1,
-        }}>
-          <Box
+    <Box sx={{
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #e3f2fd 0%, #ffffff 50%, #f3e5f5 100%)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      px: { xs: 0.5, sm: 1 },
+      py: { xs: 1, sm: 2 },
+    }}>
+      <Container maxWidth="md" sx={{ width: '100%', px: { xs: 1, sm: 2, md: 3 } }}>
+        {/* Event Banner - 16:9 Aspect Ratio - Only show on first step */}
+        {eventInfo && currentStep === 1 && (
+          <Card
             sx={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 1,
+              position: 'relative',
+              overflow: 'hidden',
+              borderRadius: 3,
+              mb: 1,
+              boxShadow: '0 10px 40px rgba(0, 0, 0, 0.1)',
+              border: 'none',
+              // 16:9 aspect ratio using paddingBottom for better mobile support
+              height: 0,
+              paddingBottom: '56.25%', // 9/16 = 0.5625
+              minHeight: { xs: '200px', sm: '250px' }, // Minimum height for mobile
             }}
+            elevation={0}
           >
+            {/* Background Image or Gradient */}
             <Box
               sx={{
-                width: { xs: 32, sm: 36, md: 40 },
-                height: { xs: 32, sm: 36, md: 40 },
-                borderRadius: 1.5,
-                backgroundColor: 'primary.main',
+                position: 'absolute',
+                inset: 0,
+                backgroundImage: (eventInfo.banner?.url && !bannerError)
+                  ? `url(${eventInfo.banner.url})`
+                  : 'linear-gradient(135deg, #1976d2 0%, #3f51b5 50%, #9c27b0 100%)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                opacity: (eventInfo.banner?.url && !bannerLoaded && !bannerError) ? 0.7 : 1,
+                transition: 'opacity 0.3s ease-in-out',
+              }}
+            />
+
+            {/* Preload banner image if exists */}
+            {eventInfo.banner?.url && (
+              <Box
+                component="img"
+                src={eventInfo.banner.url}
+                alt={`${eventInfo.name} banner`}
+                onLoad={() => setBannerLoaded(true)}
+                onError={() => setBannerError(true)}
+                sx={{
+                  position: 'absolute',
+                  width: 0,
+                  height: 0,
+                  opacity: 0,
+                  pointerEvents: 'none',
+                }}
+              />
+            )}
+
+            {/* Floor Fade Gradient for professional text readability */}
+            <Box
+              sx={{
+                position: 'absolute',
+                inset: 0,
+                background: eventInfo.banner?.url 
+                  ? 'linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.3) 80%, rgba(0,0,0,0.5) 100%)'
+                  : 'transparent',
+              }}
+            />
+            
+            {/* Content Overlay */}
+            <Box
+              sx={{
+                position: 'absolute',
+                inset: 0,
                 display: 'flex',
+                flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 2px 8px rgba(25, 118, 210, 0.2)',
+                textAlign: 'center',
+                px: { xs: 2, sm: 3 },
+                py: { xs: 2, sm: 3 },
+                color: 'white',
               }}
             >
+ 
+          
+              
               <Typography
+                variant="h4"
                 sx={{
-                  color: 'white',
                   fontWeight: 700,
-                  fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.5rem' },
+                  mb: { xs: 0.5, sm: 1 },
+                  fontSize: { xs: '1.75rem', sm: '2.25rem', md: '3rem' },
+                  letterSpacing: '-0.01em',
+                  lineHeight: 1.1,
+                  textShadow: '0 3px 8px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(0, 0, 0, 0.8)',
                 }}
               >
-                S
+                {eventInfo.name}
               </Typography>
+              
+
+              
+              {/* Event Details */}
+              <Box sx={{ 
+                display: 'flex', 
+                flexDirection: 'row',
+                alignItems: 'center', 
+                justifyContent: 'center',
+                gap: 2, 
+                color: 'rgba(255, 255, 255, 0.95)',
+                fontSize: { xs: '0.9rem', sm: '1rem' },
+                textShadow: '0 2px 4px rgba(0, 0, 0, 0.8), 0 1px 2px rgba(0, 0, 0, 0.6)',
+                flexWrap: 'wrap'
+              }}>
+                {formatEventDate(eventInfo.start_time) && (
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                    <CalendarToday sx={{ fontSize: { xs: 14, sm: 16 } }} />
+                    <Typography variant="body2" sx={{ fontSize: 'inherit' }}>
+                      {formatEventDate(eventInfo.start_time)}
+                    </Typography>
+                  </Box>
+                )}
+                
+                {eventInfo.location && (
+                  <>
+                    <Box sx={{ 
+                      width: 4, 
+                      height: 4, 
+                      bgcolor: 'rgba(255, 255, 255, 0.7)', 
+                      borderRadius: '50%'
+                    }} />
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                      <LocationOn sx={{ fontSize: { xs: 14, sm: 16 } }} />
+                      <Typography variant="body2" sx={{ fontSize: 'inherit' }}>
+                        {eventInfo.location}
+                      </Typography>
+                    </Box>
+                  </>
+                )}
+              </Box>
             </Box>
-            <Typography
-              variant="h4"
-              component="h1"
-              sx={{
-                fontWeight: 700,
-                color: 'text.primary',
-                fontSize: { xs: '1.4rem', sm: '1.6rem', md: '1.8rem' },
-                letterSpacing: '-0.02em',
-              }}
-            >
-              {import.meta.env.VITE_APP_NAME || 'SNAPPIN'}
-            </Typography>
-          </Box>
-        </Box>
-
-        {/* 第2层：导航层 - 步骤指示器 */}
-        {currentStep <= 3 && (
-        <Box sx={{ 
-          mb: { xs: '4vh', sm: '5vh', md: '6vh' },
-          maxWidth: '500px',
-          mx: 'auto',
-          width: '100%'
-        }}>
-          <StepIndicator currentStep={currentStep} totalSteps={totalSteps} />
-        </Box>
+          </Card>
         )}
 
-        {/* 第3层：内容层 - 错误提示独立块 */}
-        {submitError && (
-          <Box sx={{ 
-            mb: 3,
-            maxWidth: '550px',
+        {/* Registration Card */}
+        <Card
+          sx={{
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)',
+            border: 'none',
+            backgroundColor: 'rgba(255, 255, 255, 0.8)',
+            backdropFilter: 'blur(10px)',
+            borderRadius: 3,
+            minHeight: currentStep === 1 && eventInfo ? 'auto' : { xs: 'auto', sm: '400px' },
+            maxWidth: { xs: '100%', sm: '600px', md: '800px', lg: '900px' },
             mx: 'auto',
-            width: '100%'
-          }}>
-            <ErrorDisplay 
-              error={submitError} 
-              onDismiss={() => setSubmitError(null)}
-              variant="inline"
-            />
-          </Box>
-        )}
+          }}
+          elevation={0}
+        >
+          <CardContent sx={{ p: { xs: 1, sm: 2 } }}>
+            {/* Header - Only show for non-event registrations */}
+            {!eventInfo && (
+              <Box sx={{ textAlign: 'center', mb: 1.5 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1, mb: 0.5 }}>
+                  <Box
+                    sx={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: 1.5,
+                      backgroundColor: 'primary.main',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 2px 8px rgba(25, 118, 210, 0.2)',
+                    }}
+                  >
+                    <Typography sx={{ color: 'white', fontWeight: 700, fontSize: '1.1rem' }}>
+                      S
+                    </Typography>
+                  </Box>
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      fontWeight: 700,
+                      color: 'text.primary',
+                      fontSize: '1.5rem',
+                      letterSpacing: '-0.02em',
+                    }}
+                  >
+                    {import.meta.env.VITE_APP_NAME || 'SNAPPIN'}
+                  </Typography>
+                </Box>
+                
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: 'text.secondary',
+                    fontWeight: 500,
+                  }}
+                >
+                  Event Registration
+                </Typography>
+              </Box>
+            )}
 
-        {/* OTP错误提示 */}
-        {otpError && (
-          <Box sx={{ 
-            mb: 3,
-            maxWidth: '550px',
-            mx: 'auto',
-            width: '100%'
-          }}>
-            <ErrorDisplay 
-              error={otpError} 
-              onDismiss={() => setOtpError(null)}
-              variant="inline"
-            />
-          </Box>
-        )}
+            {/* Step Indicator */}
+            {currentStep <= 3 && (
+              <Box sx={{ mb: 1.5, mt: eventInfo ? 0 : 1 }}>
+                <StepIndicator currentStep={currentStep} totalSteps={totalSteps} />
+              </Box>
+            )}
 
-        {/* 第4层：表单内容区 */}
-        <Box sx={{ 
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          maxWidth: '550px',
-          mx: 'auto',
-          width: '100%',
-          minHeight: { xs: '45vh', sm: '48vh', md: '50vh' }
-        }}>
-          {renderCurrentStep()}
-        </Box>
+            {/* Error Messages */}
+            {submitError && (
+              <Box sx={{ mb: 1.5 }}>
+                <ErrorDisplay 
+                  error={submitError} 
+                  onDismiss={() => setSubmitError(null)}
+                  variant="inline"
+                />
+              </Box>
+            )}
+
+            {otpError && (
+              <Box sx={{ mb: 1.5 }}>
+                <ErrorDisplay 
+                  error={otpError} 
+                  onDismiss={() => setOtpError(null)}
+                  variant="inline"
+                />
+              </Box>
+            )}
+
+            {/* Form Content */}
+            <Box sx={{ mb: 1.5 }}>
+              {renderCurrentStep()}
+            </Box>
+
+            {/* Bottom Button */}
+            <Box>
+              {renderBottomButton()}
+            </Box>
+          </CardContent>
+        </Card>
       </Container>
-    </PageLayout>
+    </Box>
   )
 } 

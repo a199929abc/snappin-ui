@@ -105,6 +105,49 @@ export const CompletionStep = ({ formData }: StepProps) => {
         </Typography>
       </Box>
 
+      {/* Brand Logo Section */}
+      <Box sx={{ textAlign: 'center', mt: { xs: 3, sm: 4 }, pt: { xs: 2, sm: 3 }, borderTop: '1px solid #e0e0e0' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+          <Box
+            sx={{
+              width: 28,
+              height: 28,
+              borderRadius: 1.5,
+              backgroundColor: 'primary.main',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 2px 8px rgba(25, 118, 210, 0.2)',
+            }}
+          >
+            <Typography sx={{ color: 'white', fontWeight: 700, fontSize: '1rem' }}>
+              S
+            </Typography>
+          </Box>
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 700,
+              color: 'text.primary',
+              fontSize: '1.25rem',
+              letterSpacing: '-0.02em',
+            }}
+          >
+            {import.meta.env.VITE_APP_NAME || 'SNAPPIN'}
+          </Typography>
+        </Box>
+        <Typography
+          variant="body2"
+          sx={{
+            color: 'text.secondary',
+            fontSize: '0.8rem',
+            mt: 0.5,
+          }}
+        >
+          Powered by Snappin
+        </Typography>
+      </Box>
+
       {/* Important Notice
       <Box sx={{ mb: { xs: 2, sm: 3 } }}>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, gap: 1 }}>

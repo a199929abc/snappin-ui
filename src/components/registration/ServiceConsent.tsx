@@ -52,7 +52,7 @@ export const ServiceConsent = ({
               fontSize: { xs: '0.9rem', sm: '1rem' }
             }}
           >
-            AI Photo Recognition Service
+            Let Your Photos Find You
           </Typography>
         </Box>
 
@@ -65,8 +65,7 @@ export const ServiceConsent = ({
             fontSize: { xs: '0.85rem', sm: '0.9rem' }
           }}
         >
-          We use face recognition to automatically find you in event photos. 
-          This helps us match your photos quickly and accurately.
+          We'll automatically find your best moments from the event — using just one photo.
         </Typography>
 
         <FormControlLabel
@@ -92,7 +91,7 @@ export const ServiceConsent = ({
                 fontSize: { xs: '0.9rem', sm: '1rem' }
               }}
             >
-              I agree to use face recognition for photo matching
+              I agree to let my photo be used to find me in event pictures
               {required && (
                 <Typography
                   component="span"
@@ -121,7 +120,7 @@ export const ServiceConsent = ({
             fontSize: { xs: '0.75rem', sm: '0.8rem' }
           }}
         >
-          Required for our AI photo recognition service. 
+           Required to deliver your personalized photo experience.
           <Link 
             component="button"
             onClick={handlePrivacyClick}

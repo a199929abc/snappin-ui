@@ -63,6 +63,13 @@ export interface EventInfo {
   current_participants: number
   registration_deadline?: string
   is_full: boolean
+  banner?: {
+    id: string
+    filename: string
+    url: string
+    width: number
+    height: number
+  }
 }
 
 export interface EventRegistrationResponse {

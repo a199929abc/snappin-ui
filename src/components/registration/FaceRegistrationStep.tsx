@@ -155,7 +155,11 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
         Take a quick selfie for face recognition. This helps us find you in event photos automatically.
       </Typography>
 
-      <Box sx={{ maxWidth: { xs: 360, sm: 400, md: 440 } }}>
+      <Box sx={{ 
+        width: '100%', 
+        maxWidth: { xs: '100%', sm: '500px', md: '600px', lg: '650px' },
+        mx: 'auto'
+      }}>
         {/* Error Alert */}
         {cameraError && (
           <Alert 
@@ -174,11 +178,12 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
             mb: { xs: 2, sm: 3 },
             borderRadius: 2,
             overflow: 'hidden',
-            aspectRatio: '4/3',
+            aspectRatio: '3/4',
             position: 'relative',
             backgroundColor: '#f5f5f5',
-            minHeight: { xs: '200px', sm: '250px', md: '300px' },
-            maxHeight: { xs: '280px', sm: '350px', md: '400px' },
+            width: '100%',
+            minHeight: { xs: '350px', sm: '400px', md: '450px', lg: '500px' },
+            maxHeight: { xs: '500px', sm: '550px', md: '600px', lg: '650px' },
           }}
         >
           {!capturedPhoto && !isCapturing && (

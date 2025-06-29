@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Box, Typography, CircularProgress, Link } from '@mui/material'
 import { CheckCircle } from '@mui/icons-material'
 import { OTPInput } from './OTPInput'
@@ -15,6 +15,7 @@ export const OTPVerificationStep = ({ formData, onUpdateData, onNext, onBack, on
   const [success, setSuccess] = useState(false)
   const [isSending, setIsSending] = useState(false)
   const [resendCountdown, setResendCountdown] = useState(0)
+  const hasSentInitialOTP = useRef(false)
 
   // Mask email for privacy
   const maskEmail = (email: string) => {
@@ -33,15 +34,16 @@ export const OTPVerificationStep = ({ formData, onUpdateData, onNext, onBack, on
     }
   }, [resendCountdown])
 
-  // Auto-send OTP when component mounts
+  // Auto-send OTP when component mounts (only once)
   useEffect(() => {
-    if (formData.email && !formData.emailVerified) {
+    if (formData.email && !formData.emailVerified && !hasSentInitialOTP.current) {
+      hasSentInitialOTP.current = true
       handleSendOTP()
     }
-  }, [formData.email])
+  }, []) // Empty dependency array ensures this runs only once
 
   const handleSendOTP = async () => {
-    if (!formData.email) return
+    if (!formData.email || isSending) return // Prevent multiple simultaneous requests
     
     setIsSending(true)
     onError?.(null) // Clear any existing errors
@@ -140,26 +142,15 @@ export const OTPVerificationStep = ({ formData, onUpdateData, onNext, onBack, on
       {success && (
         <Box sx={{ 
           display: 'flex',
-          alignItems: 'center',
           justifyContent: 'center',
-          gap: 1,
           mb: 4,
-          p: 2,
-          bgcolor: 'success.50',
-          borderRadius: 2,
-          border: '1px solid',
-          borderColor: 'success.200'
+          py: 2,
         }}>
-          <CheckCircle sx={{ color: 'success.main', fontSize: 20 }} />
-          <Typography
-            variant="body2"
-            sx={{
-              fontWeight: 500,
-              color: 'success.dark'
-            }}
-          >
-            Email verified! Redirecting...
-          </Typography>
+          <CircularProgress 
+            size={40} 
+            thickness={4}
+            color="primary"
+          />
         </Box>
       )}
 

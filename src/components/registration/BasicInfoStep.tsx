@@ -65,7 +65,7 @@ export const BasicInfoStep = ({ formData, onUpdateData }: StepProps) => {
           fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
         }}
       >
-        Fill in your information so we can identify you in event photos.
+        Register to receive your personalized event gallery.
       </Typography>
 
       <Box sx={{ maxWidth: { xs: 360, sm: 400, md: 440 } }}>
