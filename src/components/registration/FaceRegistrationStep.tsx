@@ -133,38 +133,38 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
         component="h1"
         sx={{
           fontWeight: 700,
-          mb: { xs: 1.5, sm: 2, md: 2.5 },
+          mb: 1.5,
           textAlign: 'left',
           color: 'text.primary',
-          fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' },
+          fontSize: '1.75rem',
         }}
       >
-        Face Registration
+        Take Your Selfie
       </Typography>
 
       <Typography
         variant="body1"
         sx={{
-          mb: { xs: 2.5, sm: 3, md: 4 },
+          mb: 3,
           textAlign: 'left',
           color: 'text.secondary',
-          lineHeight: 1.6,
-          fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
+          lineHeight: 1.5,
+          fontSize: '1rem',
         }}
       >
-        Take a quick selfie for face recognition. This helps us find you in event photos automatically.
+        We'll use this to find you in all the event photos
       </Typography>
 
       <Box sx={{ 
         width: '100%', 
-        maxWidth: { xs: '100%', sm: '500px', md: '600px', lg: '650px' },
+        maxWidth: '100%',
         mx: 'auto'
       }}>
         {/* Error Alert */}
         {cameraError && (
           <Alert 
             severity="warning" 
-            sx={{ mb: { xs: 2, sm: 3 }, borderRadius: 2 }}
+            sx={{ mb: 2, borderRadius: 2 }}
             icon={<Error />}
           >
             {cameraError}
@@ -175,15 +175,15 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
         <Paper
           elevation={3}
           sx={{
-            mb: { xs: 2, sm: 3 },
+            mb: 2,
             borderRadius: 2,
             overflow: 'hidden',
             aspectRatio: '3/4',
             position: 'relative',
             backgroundColor: '#f5f5f5',
             width: '100%',
-            minHeight: { xs: '350px', sm: '400px', md: '450px', lg: '500px' },
-            maxHeight: { xs: '500px', sm: '550px', md: '600px', lg: '650px' },
+            minHeight: '400px',
+            maxHeight: '500px',
           }}
         >
           {!capturedPhoto && !isCapturing && (
@@ -199,10 +199,10 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
               }}
             >
 
-              <Typography variant="body2" color="text.secondary" textAlign="center">
-                📸 Position your face in the frame<br />
-                😊 Look directly at the camera<br />
-                💡 Make sure lighting is good<br />
+              <Typography variant="body2" color="text.secondary" textAlign="center" sx={{ mb: 1 }}>
+                Position your face in the frame<br />
+                Look directly at the camera<br />
+                Make sure lighting is good
               </Typography>
             
               {/* File Upload Button */}
@@ -218,6 +218,12 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
                 startIcon={<PhotoCamera />}
                 onClick={() => fileInputRef.current?.click()}
                 size="large"
+                sx={{
+                  textTransform: 'uppercase',
+                  fontWeight: 600,
+                  py: 1.5,
+                  px: 3,
+                }}
               >
                 Upload Selfie
               </Button>
