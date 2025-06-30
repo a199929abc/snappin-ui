@@ -4,21 +4,12 @@ import {
   Box,
   TextField,
   Typography,
-  MenuItem,
   InputAdornment,
 } from '@mui/material'
 import { Phone, Email, Person } from '@mui/icons-material'
 import { FaInstagram } from 'react-icons/fa'
 import { StepProps, RegistrationData } from '@/types/registration'
 import { ServiceConsent } from './ServiceConsent'
-
-const countryCodes = [
-  { code: '+1', country: 'US' },
-  { code: '+44', country: 'UK' },
-  { code: '+33', country: 'FR' },
-  { code: '+49', country: 'DE' },
-  { code: '+86', country: 'CN' },
-]
 
 export const BasicInfoStep = ({ formData, onUpdateData }: StepProps) => {
   const {
@@ -46,29 +37,28 @@ export const BasicInfoStep = ({ formData, onUpdateData }: StepProps) => {
         component="h1"
         sx={{
           fontWeight: 700,
-          mb: { xs: 1.5, sm: 2, md: 2.5 },
+          mb: 1.5,
           textAlign: 'left',
           color: 'text.primary',
-          fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' },
+          fontSize: '1.75rem',
         }}
       >
-        Registration
+        Get Your Event Photos
       </Typography>
 
       <Typography
         variant="body1"
         sx={{
-          mb: { xs: 2.5, sm: 3, md: 4 },
+          mb: 3,
           textAlign: 'left',
           color: 'text.secondary',
-          lineHeight: 1.6,
-          fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
+          lineHeight: 1.5,
+          fontSize: '1rem',
         }}
       >
-        Register to receive your personalized event gallery.
-      </Typography>
+Just one selfie — we'll find and send your best event moments.      </Typography>
 
-      <Box sx={{ maxWidth: { xs: 360, sm: 400, md: 440 } }}>
+      <Box sx={{ maxWidth: { xs: 420, sm: 480, md: 520 } }}>
         <Box sx={{ space: 3 }}>
           <Controller
             name="name"
@@ -85,11 +75,24 @@ export const BasicInfoStep = ({ formData, onUpdateData }: StepProps) => {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <Person color="action" />
+                      <Person sx={{ fontSize: 20, color: 'action.active' }} />
                     </InputAdornment>
                   ),
                 }}
-                sx={{ mb: { xs: 1.5, sm: 2 } }}
+                sx={{ 
+                  mb: 1.5,
+                  '& .MuiInputLabel-root': {
+                    fontSize: '0.875rem',
+                    fontWeight: 500,
+                  },
+                  '& .MuiInputLabel-root.Mui-focused': {
+                    fontSize: '0.75rem',
+                  },
+                  '& .MuiInputBase-input::placeholder': {
+                    fontSize: '0.875rem',
+                    opacity: 0.6
+                  }
+                }}
               />
             )}
           />
@@ -116,49 +119,62 @@ export const BasicInfoStep = ({ formData, onUpdateData }: StepProps) => {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <Email color="action" />
+                      <Email sx={{ fontSize: 20, color: 'action.active' }} />
                     </InputAdornment>
                   ),
                 }}
-                sx={{ mb: { xs: 1.5, sm: 2 } }}
+                sx={{ 
+                  mb: 1.5,
+                  '& .MuiInputLabel-root': {
+                    fontSize: '0.875rem',
+                    fontWeight: 500,
+                  },
+                  '& .MuiInputLabel-root.Mui-focused': {
+                    fontSize: '0.75rem',
+                  },
+                  '& .MuiInputBase-input::placeholder': {
+                    fontSize: '0.875rem',
+                    opacity: 0.6
+                  }
+                }}
               />
             )}
           />
 
-          <Box sx={{ display: 'flex', gap: 1, mb: { xs: 1.5, sm: 2 } }}>
-            <TextField
-              select
-              label="Code"
-              defaultValue="+1"
-              sx={{ width: { xs: 90, sm: 100 } }}
-            >
-              {countryCodes.map((option) => (
-                <MenuItem key={option.code} value={option.code}>
-                  {option.code}
-                </MenuItem>
-              ))}
-            </TextField>
-
-            <Controller
-              name="phone"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  fullWidth
-                  label="Phone Number (Optional)"
-                  placeholder="555 555-1234"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Phone color="action" />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              )}
-            />
-          </Box>
+          <Controller
+            name="phone"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                fullWidth
+                label="Phone Number(Optional)"
+                placeholder="555-555-1234"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Phone sx={{ fontSize: 20, color: 'action.active' }} />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{ 
+                  mb: 1.5,
+                  '& .MuiInputLabel-root': {
+                    fontSize: '0.875rem',
+                    fontWeight: 400,
+                    opacity: 0.8,
+                  },
+                  '& .MuiInputLabel-root.Mui-focused': {
+                    fontSize: '0.75rem',
+                  },
+                  '& .MuiInputBase-input::placeholder': {
+                    fontSize: '0.875rem',
+                    opacity: 0.6
+                  }
+                }}
+              />
+            )}
+          />
 
           <Controller
             name="instagram"
@@ -167,17 +183,30 @@ export const BasicInfoStep = ({ formData, onUpdateData }: StepProps) => {
               <TextField
                 {...field}
                 fullWidth
-                label="Instagram Handle (optional)"
-                placeholder="e.g. @alex.james"
-                helperText="We'll tag you if we share your photo (with consent)"
+                label="Instagram Handle(Optional)"
+                placeholder="@alex.james"
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <FaInstagram color="#E4405F" size={20} />
+                      <FaInstagram size={20} color="#8e8e93" />
                     </InputAdornment>
                   ),
                 }}
-                sx={{ mb: { xs: 1.5, sm: 2 } }}
+                sx={{ 
+                  mb: 1.5,
+                  '& .MuiInputLabel-root': {
+                    fontSize: '0.875rem',
+                    fontWeight: 400,
+                    opacity: 0.8,
+                  },
+                  '& .MuiInputLabel-root.Mui-focused': {
+                    fontSize: '0.75rem',
+                  },
+                  '& .MuiInputBase-input::placeholder': {
+                    fontSize: '0.875rem',
+                    opacity: 0.6
+                  }
+                }}
               />
             )}
           />

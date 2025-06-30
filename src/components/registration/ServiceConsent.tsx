@@ -1,6 +1,5 @@
-import { useState } from 'react'
-import { Box, FormControlLabel, Checkbox, Typography, Link } from '@mui/material'
-import { Security } from '@mui/icons-material'
+import React, { useState, useEffect } from 'react'
+import { Box, Typography, Link } from '@mui/material'
 import { PrivacyModal } from './PrivacyModal'
 
 interface ServiceConsentProps {
@@ -21,113 +20,40 @@ export const ServiceConsent = ({
     setPrivacyModalOpen(true)
   }
 
+  // Automatically set consent to true when component mounts
+  // since this is now implicit consent through the "continue" action
+  useEffect(() => {
+    if (!checked) {
+      onChange(true)
+    }
+  }, [checked, onChange])
+
   return (
     <>
       <Box sx={{ 
-        mt: { xs: 2, sm: 3 },
-        p: { xs: 2, sm: 2.5 },
-        bgcolor: 'grey.50',
-        borderRadius: 2,
-        border: '1px solid',
-        borderColor: 'grey.200'
+        mt: { xs: 1, sm: 1.5 },
+        mb: { xs: 0.5, sm: 1 }
       }}>
-        <Box sx={{ 
-          display: 'flex',
-          alignItems: 'flex-start',
-          gap: 1.5,
-          mb: 1
-        }}>
-          <Security 
-            sx={{ 
-              color: 'primary.main',
-              fontSize: { xs: 20, sm: 24 },
-              mt: 0.5
-            }} 
-          />
-          <Typography
-            variant="subtitle2"
-            sx={{
-              fontWeight: 600,
-              color: 'text.primary',
-              fontSize: { xs: '0.9rem', sm: '1rem' }
-            }}
-          >
-            Let Your Photos Find You
-          </Typography>
-        </Box>
-
         <Typography
           variant="body2"
           sx={{
-            mb: 2,
             color: 'text.secondary',
-            lineHeight: 1.5,
-            fontSize: { xs: '0.85rem', sm: '0.9rem' }
+            fontSize: { xs: '0.75rem', sm: '0.8rem' },
+            fontWeight: 400,
+            lineHeight: 1.4,
+            textAlign: 'left'
           }}
         >
-          We'll automatically find your best moments from the event — using just one photo.
-        </Typography>
-
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={checked}
-              onChange={(e) => onChange(e.target.checked)}
-             
-              color="primary"
-              sx={{ 
-                '& .MuiSvgIcon-root': { 
-                  fontSize: { xs: 20, sm: 24 } 
-                } 
-              }}
-            />
-          }
-          label={
-            <Typography
-              variant="body2"
-              sx={{
-                fontWeight: 500,
-                color: 'text.primary',
-                fontSize: { xs: '0.9rem', sm: '1rem' }
-              }}
-            >
-              I agree to let my photo be used to find me in event pictures
-              {required && (
-                <Typography
-                  component="span"
-                  sx={{ color: 'error.main', ml: 0.5 }}
-                >
-                  *
-                </Typography>
-              )}
-            </Typography>
-          }
-          sx={{ 
-            alignItems: 'flex-start',
-            ml: 0,
-            '& .MuiFormControlLabel-label': {
-              ml: 1
-            }
-          }}
-        />
-
-        <Typography
-          variant="caption"
-          sx={{
-            display: 'block',
-            mt: 1,
-            color: 'text.secondary',
-            fontSize: { xs: '0.75rem', sm: '0.8rem' }
-          }}
-        >
-           Required to deliver your personalized photo experience.
+          By continuing, you agree to photo matching to find you in event pictures. We only use your info for this event.{' '}
           <Link 
             component="button"
             onClick={handlePrivacyClick}
             sx={{ 
-              ml: 0.5,
+              fontSize: 'inherit',
               textDecoration: 'none',
               cursor: 'pointer',
+              fontWeight: 500,
+              color: 'primary.main',
               '&:hover': { textDecoration: 'underline' }
             }}
           >
