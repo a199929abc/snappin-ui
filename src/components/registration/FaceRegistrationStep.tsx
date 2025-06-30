@@ -80,11 +80,8 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
       canvas.height = videoRef.current.videoHeight
       
       if (context) {
-        // Flip the canvas horizontally to correct the mirrored preview
-        context.translate(canvas.width, 0)
-        context.scale(-1, 1)
-        
-        // Draw the video frame
+        // Keep the same mirrored orientation as the preview
+        // No flipping - maintain consistency with what user sees
         context.drawImage(videoRef.current, 0, 0)
         
         canvas.toBlob((blob) => {
