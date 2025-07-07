@@ -1,6 +1,7 @@
 import { Box, Typography, Button, Paper, Chip } from '@mui/material'
 import { CheckCircle, Email, AccessTime, PhoneAndroid } from '@mui/icons-material'
 import { StepProps } from '@/types/registration'
+import promPhoto from '@/assets/prom_photo.png'
 
 export const CompletionStep = ({ formData }: StepProps) => {
   const handleClose = () => {
@@ -33,11 +34,11 @@ export const CompletionStep = ({ formData }: StepProps) => {
           fontWeight: 700,
           mb: { xs: 1.5, sm: 2, md: 2.5 },
           textAlign: 'left',
-          color: 'text.primary',
-          fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' },
+          color: '#1d1d1f',
+          fontSize: '1.75rem',
         }}
       >
-        Registration Complete!
+        You're all set!
       </Typography>
 
       <Typography
@@ -45,13 +46,12 @@ export const CompletionStep = ({ formData }: StepProps) => {
         sx={{
           mb: { xs: 2.5, sm: 3, md: 4 },
           textAlign: 'left',
-          color: 'text.secondary',
+          color: '#6e6e73',
           lineHeight: 1.6,
-          fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
+          fontSize: '1rem',
         }}
       >
-       You're all set! We'll email you when your photos are ready.
-      </Typography>
+Smile big. We'll take it from here.      </Typography>
 
       {/* Email Info */}
       <Paper
@@ -66,7 +66,7 @@ export const CompletionStep = ({ formData }: StepProps) => {
         <Box sx={{ display: 'flex', alignItems: 'center', mb: { xs: 1.5, sm: 2 } }}>
           <Email sx={{ color: '#1976d2', mr: 1, fontSize: { xs: 20, sm: 24 } }} />
           <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: { xs: '0.9rem', sm: '1rem' } }}>
-            Watch for emails at:
+            Your gallery will be sent to:
           </Typography>
         </Box>
         <Typography
@@ -76,14 +76,47 @@ export const CompletionStep = ({ formData }: StepProps) => {
             color: '#1976d2',
             wordBreak: 'break-word',
             fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
+            mb: { xs: 1.5, sm: 2 },
           }}
         >
           {formData.email}
         </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <AccessTime sx={{ color: '#ff9800', fontSize: { xs: 18, sm: 20 } }} />
+          <Typography variant="body2" sx={{ color: '#6e6e73', fontSize: { xs: '0.8rem', sm: '0.875rem' } }}>
+            Your gallery expands each time we spot you in a photo
+          </Typography>
+        </Box>
       </Paper>
 
+      {/* Illustration */}
+      {promPhoto && (
+        <Paper
+          elevation={1}
+          sx={{
+            mb: { xs: 2, sm: 3 },
+            borderRadius: 2,
+            backgroundColor: '#f8f9fa',
+            overflow: 'hidden',
+          }}
+        >
+          <Box
+            component="img"
+            src={promPhoto}
+            alt="People taking photos at an event"
+            sx={{
+              width: '100%',
+              height: { xs: 180, sm: 200 },
+              objectFit: 'cover',
+              objectPosition: 'center 20%', // 显示图片上半部分
+              display: 'block',
+            }}
+          />
+        </Paper>
+      )}
+
       {/* Timeline Info */}
-      <Box sx={{ mb: { xs: 2.5, sm: 3, md: 4 } }}>
+      {/* <Box sx={{ mb: { xs: 2.5, sm: 3, md: 4 } }}>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: { xs: 1.5, sm: 2 }, gap: 1 }}>
           <AccessTime sx={{ color: '#ff9800', fontSize: { xs: 18, sm: 20 } }} />
           <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: { xs: '0.9rem', sm: '1rem' } }}>
@@ -103,7 +136,7 @@ export const CompletionStep = ({ formData }: StepProps) => {
         <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}>
           After the event ends
         </Typography>
-      </Box>
+      </Box> */}
 
       {/* Brand Logo Section */}
       <Box sx={{ textAlign: 'center', mt: { xs: 3, sm: 4 }, pt: { xs: 2, sm: 3 }, borderTop: '1px solid #e0e0e0' }}>

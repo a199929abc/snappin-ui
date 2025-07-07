@@ -39,11 +39,11 @@ export const BasicInfoStep = ({ formData, onUpdateData }: StepProps) => {
           fontWeight: 700,
           mb: 1.5,
           textAlign: 'left',
-          color: 'text.primary',
+          color: '#1d1d1f',
           fontSize: '1.75rem',
         }}
       >
-        Get Your Event Photos
+         Get Your Event Gallery
       </Typography>
 
       <Typography
@@ -51,12 +51,13 @@ export const BasicInfoStep = ({ formData, onUpdateData }: StepProps) => {
         sx={{
           mb: 3,
           textAlign: 'left',
-          color: 'text.secondary',
+          color: '#6e6e73',
           lineHeight: 1.5,
           fontSize: '1rem',
         }}
       >
-Just one selfie — we'll find and send your best event moments.      </Typography>
+        Just one selfie — we'll find and send your best event moments.
+      </Typography>
 
       <Box sx={{ maxWidth: { xs: 420, sm: 480, md: 520 } }}>
         <Box sx={{ space: 3 }}>
@@ -75,7 +76,7 @@ Just one selfie — we'll find and send your best event moments.      </Typograp
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <Person sx={{ fontSize: 20, color: 'action.active' }} />
+                      <Person sx={{ fontSize: 20, color: '#8e8e93' }} />
                     </InputAdornment>
                   ),
                 }}
@@ -84,13 +85,30 @@ Just one selfie — we'll find and send your best event moments.      </Typograp
                   '& .MuiInputLabel-root': {
                     fontSize: '0.875rem',
                     fontWeight: 500,
+                    color: '#1d1d1f',
                   },
                   '& .MuiInputLabel-root.Mui-focused': {
                     fontSize: '0.75rem',
+                    color: '#007aff',
+                  },
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: '#d2d2d7',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#8e8e93',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#007aff',
+                    },
+                  },
+                  '& .MuiInputBase-input': {
+                    color: '#1d1d1f',
                   },
                   '& .MuiInputBase-input::placeholder': {
                     fontSize: '0.875rem',
-                    opacity: 0.6
+                    opacity: 0.6,
+                    color: '#8e8e93',
                   }
                 }}
               />
@@ -119,7 +137,7 @@ Just one selfie — we'll find and send your best event moments.      </Typograp
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <Email sx={{ fontSize: 20, color: 'action.active' }} />
+                      <Email sx={{ fontSize: 20, color: '#8e8e93' }} />
                     </InputAdornment>
                   ),
                 }}
@@ -128,13 +146,30 @@ Just one selfie — we'll find and send your best event moments.      </Typograp
                   '& .MuiInputLabel-root': {
                     fontSize: '0.875rem',
                     fontWeight: 500,
+                    color: '#1d1d1f',
                   },
                   '& .MuiInputLabel-root.Mui-focused': {
                     fontSize: '0.75rem',
+                    color: '#007aff',
+                  },
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: '#d2d2d7',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#8e8e93',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#007aff',
+                    },
+                  },
+                  '& .MuiInputBase-input': {
+                    color: '#1d1d1f',
                   },
                   '& .MuiInputBase-input::placeholder': {
                     fontSize: '0.875rem',
-                    opacity: 0.6
+                    opacity: 0.6,
+                    color: '#8e8e93',
                   }
                 }}
               />
@@ -153,7 +188,7 @@ Just one selfie — we'll find and send your best event moments.      </Typograp
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <Phone sx={{ fontSize: 20, color: 'action.active' }} />
+                      <Phone sx={{ fontSize: 20, color: '#8e8e93' }} />
                     </InputAdornment>
                   ),
                 }}
@@ -162,14 +197,30 @@ Just one selfie — we'll find and send your best event moments.      </Typograp
                   '& .MuiInputLabel-root': {
                     fontSize: '0.875rem',
                     fontWeight: 400,
-                    opacity: 0.8,
+                    color: '#8e8e93',
                   },
                   '& .MuiInputLabel-root.Mui-focused': {
                     fontSize: '0.75rem',
+                    color: '#007aff',
+                  },
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: '#d2d2d7',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#8e8e93',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#007aff',
+                    },
+                  },
+                  '& .MuiInputBase-input': {
+                    color: '#1d1d1f',
                   },
                   '& .MuiInputBase-input::placeholder': {
                     fontSize: '0.875rem',
-                    opacity: 0.6
+                    opacity: 0.6,
+                    color: '#8e8e93',
                   }
                 }}
               />
@@ -197,14 +248,30 @@ Just one selfie — we'll find and send your best event moments.      </Typograp
                   '& .MuiInputLabel-root': {
                     fontSize: '0.875rem',
                     fontWeight: 400,
-                    opacity: 0.8,
+                    color: '#8e8e93',
                   },
                   '& .MuiInputLabel-root.Mui-focused': {
                     fontSize: '0.75rem',
+                    color: '#007aff',
+                  },
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: '#d2d2d7',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#8e8e93',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#007aff',
+                    },
+                  },
+                  '& .MuiInputBase-input': {
+                    color: '#1d1d1f',
                   },
                   '& .MuiInputBase-input::placeholder': {
                     fontSize: '0.875rem',
-                    opacity: 0.6
+                    opacity: 0.6,
+                    color: '#8e8e93',
                   }
                 }}
               />

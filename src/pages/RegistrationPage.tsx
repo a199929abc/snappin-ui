@@ -13,7 +13,7 @@ import { ErrorDisplay } from '@/components/shared/StatusComponents'
 
 export const RegistrationPage = () => {
   const { slug } = useParams<{ slug?: string }>()
-  const [currentStep, setCurrentStep] = useState(1)
+  const [currentStep, setCurrentStep] = useState(4)
   const [formData, setFormData] = useState<RegistrationData>({
     name: '',
     email: '',
@@ -275,7 +275,7 @@ export const RegistrationPage = () => {
               disabled={!isFormValid || isSubmitting}
               sx={{ ...buttonStyle, flex: 2 }}
             >
-              Submit Registration
+              Looks good!
             </Button>
           </Box>
         )
@@ -454,9 +454,9 @@ export const RegistrationPage = () => {
         {/* Registration Card */}
         <Card
           sx={{
-            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
             border: 'none',
-            backgroundColor: 'rgba(255, 255, 255, 0.8)',
+            backgroundColor: '#fafafa',
             backdropFilter: 'blur(10px)',
             borderRadius: 3,
             minHeight: currentStep === 1 && eventInfo ? 'auto' : { xs: 'auto', sm: '400px' },
