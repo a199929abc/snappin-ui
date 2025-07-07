@@ -13,7 +13,7 @@ import { ErrorDisplay } from '@/components/shared/StatusComponents'
 
 export const RegistrationPage = () => {
   const { slug } = useParams<{ slug?: string }>()
-  const [currentStep, setCurrentStep] = useState(4)
+  const [currentStep, setCurrentStep] = useState(1)
   const [formData, setFormData] = useState<RegistrationData>({
     name: '',
     email: '',
