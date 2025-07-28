@@ -328,16 +328,8 @@ export const GalleryPage = () => {
 
   // Memoized filtered photos
   const filteredPhotos = useMemo(() => {
-    switch (activeFilter) {
-      case 'enhanced':
-        return photos.filter(photo => photo.isEnhanced)
-      case 'favorites':
-        return photos.filter(photo => photo.isFavorite)
-      case 'all':
-      default:
-        return photos
-    }
-  }, [photos, activeFilter])
+    return photos
+  }, [photos])
 
   // Event handlers
   const handleFilterChange = useCallback((filter: GalleryFilter) => {

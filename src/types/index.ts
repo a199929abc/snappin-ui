@@ -80,7 +80,7 @@ export interface ComponentProps {
 }
 
 // Gallery specific types
-export type GalleryFilter = 'all' | 'enhanced' | 'favorites'
+export type GalleryFilter = 'all'
 
 export interface GalleryPhoto {
   id: string

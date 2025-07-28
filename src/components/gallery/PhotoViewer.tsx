@@ -20,8 +20,6 @@ import {
   Download, 
   ArrowBackIos, 
   ArrowForwardIos, 
-  Favorite,
-  FavoriteBorder,
   TrendingUp,
   DeleteOutline
 } from '@mui/icons-material'
@@ -51,7 +49,6 @@ export const PhotoViewer = ({
 }: PhotoViewerProps) => {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(currentIndex)
   const [showControls, setShowControls] = useState(true)
-  const [isFavorite, setIsFavorite] = useState(false)
   const [showFirstTimeHint, setShowFirstTimeHint] = useState(false)
   const [shareButtonGlow, setShareButtonGlow] = useState(false)
   const [hasUsedShare, setHasUsedShare] = useState(false)
@@ -586,9 +583,6 @@ export const PhotoViewer = ({
     }
   }, [currentPhoto, onDownload, trackPhotoDownload, currentPhotoIndex, photos.length, hasUsedDownload])
 
-  const handleToggleFavorite = useCallback(() => {
-    setIsFavorite(prev => !prev)
-  }, [])
 
   // Delete handlers
   const handleDeleteClick = useCallback(() => {
@@ -934,25 +928,6 @@ export const PhotoViewer = ({
                 </IconButton>
               </Tooltip>
 
-                <IconButton
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleToggleFavorite()
-                  }}
-                  sx={{
-                    color: 'white',
-                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                  width: { xs: 52, md: 56 },
-                  height: { xs: 52, md: 56 },
-                    '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                      transform: 'scale(1.05)',
-                    },
-                  transition: 'all 0.3s ease',
-                  }}
-                >
-                {isFavorite ? <Favorite sx={{ color: '#ff4081' }} /> : <FavoriteBorder />}
-                </IconButton>
 
               <Tooltip title="Download this photo" placement="top">
                 <IconButton

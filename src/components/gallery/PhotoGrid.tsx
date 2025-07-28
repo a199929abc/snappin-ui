@@ -17,8 +17,8 @@ export const PhotoGrid = memo(({
   
   // Instagram风格的响应式网格配置
   const gridConfig = useMemo(() => {
-    // Instagram式列数：移动端3列，平板4列，桌面端5列
-    const columnCount = isMobile ? 3 : isTablet ? 4 : 5
+    // 优化列数：移动端2列，平板3列，桌面端4列
+    const columnCount = isMobile ? 2 : isTablet ? 3 : 4
     
     // Instagram式紧密间距
     const gap = isMobile ? 2 : 3
@@ -196,61 +196,6 @@ const InstagramPhotoCard = memo(({
         </Box>
       )}
       
-      {/* Instagram风格的标记 - 更加克制 */}
-      {(photo.isEnhanced || photo.isFavorite) && imageLoaded && !isMobile && (
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 6,
-            right: 6,
-            display: 'flex',
-            gap: 0.5,
-            flexDirection: 'column',
-            opacity: 0,
-            transition: 'opacity 0.2s ease-out',
-            '.MuiCard-root:hover &': {
-              opacity: 1,
-            },
-          }}
-        >
-          {photo.isEnhanced && (
-            <Box
-              sx={{
-                backgroundColor: 'rgba(0, 0, 0, 0.75)',
-                color: 'white',
-                fontSize: '0.625rem',
-                fontWeight: 600,
-                px: 0.75,
-                py: 0.25,
-                borderRadius: 1,
-                backdropFilter: 'blur(4px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-              }}
-            >
-              AI
-            </Box>
-          )}
-          {photo.isFavorite && (
-            <Box
-              sx={{
-                backgroundColor: 'rgba(0, 0, 0, 0.75)',
-                color: '#ffd700',
-                fontSize: '0.75rem',
-                width: 18,
-                height: 18,
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backdropFilter: 'blur(4px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-              }}
-            >
-              ★
-            </Box>
-          )}
-        </Box>
-      )}
       
       {/* Instagram风格的hover overlay - 非常微妙 */}
       {!isMobile && (

@@ -8,12 +8,10 @@ interface FilterTabsProps {
 
 const filterLabels: Record<GalleryFilter, string> = {
   all: 'All',
-  enhanced: 'Enhanced',
-  favorites: 'Favorites',
 }
 
 export const FilterTabs = ({ activeFilter, onFilterChange }: FilterTabsProps) => {
-  const filters: GalleryFilter[] = ['all', 'enhanced', 'favorites']
+  const filters: GalleryFilter[] = ['all']
 
   return (
     <Box

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { Button, Box, Container, Typography, Card, CardContent } from '@mui/material'
 import { CalendarToday, LocationOn } from '@mui/icons-material'
@@ -69,10 +69,9 @@ export const RegistrationPage = () => {
     }
   }, [currentStep, formData])
 
-  const handleUpdateData = (data: Partial<RegistrationData>) => {
-    const updatedData = { ...formData, ...data }
-    setFormData(updatedData)
-  }
+  const handleUpdateData = useCallback((data: Partial<RegistrationData>) => {
+    setFormData(prevData => ({ ...prevData, ...data }))
+  }, [])
 
   const handleNext = async () => {
     // Clear any previous errors

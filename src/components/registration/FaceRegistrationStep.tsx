@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import {
   Box,
   Button,
@@ -8,8 +8,36 @@ import {
   Alert,
   Divider,
 } from '@mui/material'
-import { PhotoCamera, Refresh, CheckCircle, Upload, Error } from '@mui/icons-material'
+import { PhotoCamera, Refresh, CheckCircle, Upload, Error, Face, CameraAlt, Favorite, PanTool } from '@mui/icons-material'
 import { StepProps } from '@/types/registration'
+import selfie1 from '@/assets/selfie1.png'
+import selfie2 from '@/assets/selfie2.png'
+import selfie3 from '@/assets/selfie3.png'
+import selfie4 from '@/assets/selfie4.png'
+
+// 自拍场景照片数据
+const selfieScenes = [
+  {
+    image: selfie1,
+    color: "#1976d2",
+    bgColor: "rgba(25, 118, 210, 0.1)"
+  },
+  {
+    image: selfie2,
+    color: "#9c27b0",
+    bgColor: "rgba(156, 39, 176, 0.1)"
+  },
+  {
+    image: selfie3,
+    color: "#e91e63",
+    bgColor: "rgba(233, 30, 99, 0.1)"
+  },
+  {
+    image: selfie4,
+    color: "#ff9800",
+    bgColor: "rgba(255, 152, 0, 0.1)"
+  }
+]
 
 export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepProps) => {
   const [isCapturing, setIsCapturing] = useState(false)
@@ -21,8 +49,20 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
   const [cameraError, setCameraError] = useState<string | null>(null)
   const [showFlash, setShowFlash] = useState(false)
   const [showSuccessCheck, setShowSuccessCheck] = useState(false)
+  const [currentSceneIndex, setCurrentSceneIndex] = useState(0)
   const videoRef = useRef<HTMLVideoElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // 轮播动画效果
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSceneIndex((prevIndex) => 
+        (prevIndex + 1) % selfieScenes.length
+      )
+    }, 2000) // 每2秒切换
+
+    return () => clearInterval(interval)
+  }, [])
 
   const startCamera = useCallback(async () => {
     try {
@@ -214,90 +254,113 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
                 alignItems: 'center',
                 justifyContent: 'center',
                 height: '100%',
-                gap: 3,
-                p: 4,
+                gap: { xs: 1.5, sm: 2 },
+                p: { xs: 2, sm: 4 },
+                background: 'linear-gradient(135deg, rgba(25, 118, 210, 0.02) 0%, rgba(63, 81, 181, 0.02) 100%)',
+                minHeight: { xs: '320px', sm: '400px' },
               }}
             >
-              {/* Selfie Guide Placeholder */}
+              {/* Modern Animated Face Icon */}
               <Box
                 sx={{
-                  width: 120,
-                  height: 120,
-                  borderRadius: '50%',
-                  backgroundColor: '#f2f2f7',
-                  border: '2px dashed #c7c7cc',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  mb: 2,
+                  position: 'relative',
+                  mb: { xs: 1.5, sm: 2 },
+                  // 确保在小屏幕上有足够空间
+                  maxWidth: '100%',
+                  maxHeight: { xs: '200px', sm: '240px' },
                 }}
               >
-                <svg
-                  width="60"
-                  height="60"
-                  viewBox="0 0 60 60"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  {/* Head */}
-                  <circle
-                    cx="30"
-                    cy="20"
-                    r="12"
-                    fill="none"
-                    stroke="#8e8e93"
-                    strokeWidth="2"
-                  />
+                {/* Current Scene Data */}
+                {(() => {
+                  const currentScene = selfieScenes[currentSceneIndex]
                   
-                  {/* Shoulders/Upper body */}
-                  <path
-                    d="M12 50 Q18 32 30 32 Q42 32 48 50"
-                    fill="none"
-                    stroke="#8e8e93"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                  
-                  {/* Simple face features */}
-                  <circle cx="26" cy="18" r="1.5" fill="#8e8e93"/>
-                  <circle cx="34" cy="18" r="1.5" fill="#8e8e93"/>
-                  <path
-                    d="M26 24 Q30 26 34 24"
-                    stroke="#8e8e93"
-                    strokeWidth="1.5"
-                    fill="none"
-                    strokeLinecap="round"
-                  />
-                </svg>
+                  return (
+                    <>
+                      {/* Outer glow ring - 响应式尺寸 */}
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          top: '50%',
+                          left: '50%',
+                          transform: 'translate(-50%, -50%)',
+                          width: { xs: 160, sm: 180, md: 260 },
+                          height: { xs: 200, sm: 220, md: 300 },
+                          borderRadius: '50%',
+                          background: `linear-gradient(135deg, ${currentScene.bgColor} 0%, ${currentScene.bgColor} 100%)`,
+                          animation: 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                          transition: 'all 0.5s ease-in-out',
+                          '@keyframes pulse': {
+                            '0%, 100%': {
+                              opacity: 0.6,
+                              transform: 'translate(-50%, -50%) scale(1)',
+                            },
+                            '50%': {
+                              opacity: 0.8,
+                              transform: 'translate(-50%, -50%) scale(1.05)',
+                            },
+                          },
+                        }}
+                      />
+                      
+                      {/* Main elliptical container - 响应式尺寸 */}
+                      <Box
+                        sx={{
+                          width: { xs: 140, sm: 160, md: 240 },
+                          height: { xs: 180, sm: 200, md: 280 },
+                          borderRadius: '50%',
+                          backgroundColor: '#ffffff',
+                          border: `3px solid ${currentScene.color}20`,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          boxShadow: `0 8px 32px ${currentScene.color}20, 0 2px 8px ${currentScene.color}15`,
+                          position: 'relative',
+                          overflow: 'hidden',
+                          transition: 'all 0.5s ease-in-out',
+                        }}
+                      >
+                        {/* Selfie Photo - 响应式尺寸 */}
+                        <Box
+                          component="img"
+                          src={currentScene.image}
+                          alt="Selfie example"
+                          sx={{
+                            width: '90%',
+                            height: '90%',
+                            borderRadius: '50%',
+                            objectFit: 'cover',
+                            objectPosition: 'center',
+                            transition: 'all 0.3s ease-in-out',
+                            animation: 'fadeIn 0.5s ease-in-out',
+                            '@keyframes fadeIn': {
+                              '0%': { opacity: 0, transform: 'scale(0.8)' },
+                              '100%': { opacity: 1, transform: 'scale(1)' },
+                            },
+                          }}
+                        />
+                        
+                        {/* Subtle highlight overlay */}
+                        <Box
+                          sx={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%)',
+                            borderRadius: '50%',
+                            pointerEvents: 'none',
+                          }}
+                        />
+                      </Box>
+                    </>
+                  )
+                })()}
               </Box>
 
-                            <Box sx={{ textAlign: 'center', maxWidth: 320, mb: 1, px: 1 }}>
-                <Typography 
-                  variant="body1" 
-                  sx={{ 
-                    color: '#1d1d1f',
-                    fontSize: { xs: '0.95rem', sm: '1rem' },
-                    fontWeight: 500,
-                    lineHeight: 1.3,
-                    mb: 0.5,
-                  }}
-                >
-                  👀 Look at camera and smile!
-                </Typography>
-                
-                <Typography 
-                  variant="body2" 
-                  sx={{ 
-                    color: '#6e6e73',
-                    fontSize: { xs: '0.8rem', sm: '0.875rem' },
-                    lineHeight: 1.3,
-                  }}
-                >
-                  😊 Make sure your face is centered and clearly visible.
-                </Typography>
-              </Box>
+
             
-              {/* File Upload Button */}
+              {/* Modern Action Buttons */}
               <input
                 type="file"
                 accept="image/*"
@@ -306,72 +369,101 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
                 style={{ display: 'none' }}
               />
               
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: 280 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: 320, gap: 3 }}>
+                {/* Primary CTA Button */}
                 <Button
                   variant="contained"
                   size="large"
-                  startIcon={<PhotoCamera aria-label="" />}
+                  startIcon={<PhotoCamera sx={{ fontSize: '1.2rem' }} />}
                   onClick={startCamera}
                   disabled={isCapturing}
                   sx={{
                     width: '100%',
-                    minHeight: { xs: 48, sm: 52 },
-                    borderRadius: 2,
+                    minHeight: 52,
+                    borderRadius: 3,
                     textTransform: 'none',
                     fontWeight: 600,
-                    fontSize: { xs: '0.95rem', sm: '1rem' },
-                    backgroundColor: '#007aff',
-                    boxShadow: '0 2px 12px rgba(0, 122, 255, 0.3)',
+                    fontSize: '1rem',
+                    background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
+                    boxShadow: '0 4px 20px rgba(25, 118, 210, 0.25), 0 1px 3px rgba(0, 0, 0, 0.12)',
+                    border: 'none',
+                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                     '&:hover': {
-                      backgroundColor: '#0056b3',
-                      boxShadow: '0 4px 16px rgba(0, 122, 255, 0.4)',
+                      background: 'linear-gradient(135deg, #1565c0 0%, #0d47a1 100%)',
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 6px 24px rgba(25, 118, 210, 0.35), 0 2px 6px rgba(0, 0, 0, 0.15)',
+                    },
+                    '&:active': {
+                      transform: 'translateY(0px)',
+                    },
+                    '&:disabled': {
+                      background: '#e0e0e0',
+                      transform: 'none',
+                      boxShadow: 'none',
                     },
                   }}
                 >
                   {isCapturing ? 'Opening Camera...' : 'Take Selfie'}
                 </Button>
 
-                {/* Divider */}
+                {/* Elegant Divider */}
                 <Box
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
                     width: '100%',
-                    my: 3,
+                    gap: 2,
                   }}
                 >
-                  <Box sx={{ flex: 1, height: '1px', backgroundColor: '#e5e5e7' }} />
+                  <Box 
+                    sx={{ 
+                      flex: 1, 
+                      height: '1px', 
+                      background: 'linear-gradient(90deg, transparent 0%, #e0e0e0 50%, transparent 100%)'
+                    }} 
+                  />
                   <Typography
                     variant="body2"
                     sx={{
-                      px: 2,
-                      color: '#8e8e93',
+                      color: '#999',
                       fontSize: '0.875rem',
+                      fontWeight: 500,
+                      px: 1,
                     }}
                   >
                     or
                   </Typography>
-                  <Box sx={{ flex: 1, height: '1px', backgroundColor: '#e5e5e7' }} />
+                  <Box 
+                    sx={{ 
+                      flex: 1, 
+                      height: '1px', 
+                      background: 'linear-gradient(90deg, transparent 0%, #e0e0e0 50%, transparent 100%)'
+                    }} 
+                  />
                 </Box>
 
-                {/* Upload Link */}
-                <Typography
+                {/* Secondary Upload Button */}
+                <Button
+                  variant="text"
                   onClick={() => fileInputRef.current?.click()}
+                  startIcon={<Upload sx={{ fontSize: '1rem' }} />}
                   sx={{
-                    color: '#007aff',
+                    color: '#1976d2',
                     fontSize: '0.95rem',
                     fontWeight: 500,
-                    cursor: 'pointer',
-                    textDecoration: 'none',
+                    textTransform: 'none',
+                    borderRadius: 2,
+                    px: 3,
+                    py: 1.5,
                     transition: 'all 0.2s ease',
                     '&:hover': {
-                      color: '#0056b3',
-                      textDecoration: 'underline',
+                      backgroundColor: 'rgba(25, 118, 210, 0.04)',
+                      transform: 'translateY(-1px)',
                     },
                   }}
                 >
-                  Upload a photo instead
-                </Typography>
+                  Upload from device
+                </Button>
               </Box>
             </Box>
           )}
