@@ -4,11 +4,10 @@ import {
   Button,
   Typography,
   Paper,
-  IconButton,
   Alert,
-  Divider,
+
 } from '@mui/material'
-import { PhotoCamera, Refresh, CheckCircle, Upload, Error, Face, CameraAlt, Favorite, PanTool } from '@mui/icons-material'
+import { PhotoCamera, Refresh, CheckCircle, Error, Face, CameraAlt, Favorite, PanTool } from '@mui/icons-material'
 import { StepProps } from '@/types/registration'
 import selfie1 from '@/assets/selfie1.png'
 import selfie2 from '@/assets/selfie2.png'
@@ -51,7 +50,6 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
   const [showSuccessCheck, setShowSuccessCheck] = useState(false)
   const [currentSceneIndex, setCurrentSceneIndex] = useState(0)
   const videoRef = useRef<HTMLVideoElement>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
 
   // 轮播动画效果
   useEffect(() => {
@@ -95,13 +93,13 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
       
       // Provide user-friendly error messages
       if (error.name === 'NotAllowedError') {
-        setCameraError('Camera permission denied. Please allow camera access and try again, or upload a photo instead.')
+        setCameraError('Camera permission denied. Please allow camera access in your browser settings and try again.')
       } else if (error.name === 'NotFoundError') {
-        setCameraError('No camera found. Please upload a photo instead.')
+        setCameraError('No camera detected. Please ensure your device has a working camera.')
       } else if (error.name === 'NotSupportedError') {
-        setCameraError('Camera not supported. Please upload a photo instead.')
+        setCameraError('Camera not supported by your browser. Please try using a different browser.')
       } else {
-        setCameraError('Camera not available. Please upload a photo instead.')
+        setCameraError('Camera not available. Please check your device settings and try again.')
       }
     }
   }, [])
@@ -162,15 +160,6 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
     }
   }, [onUpdateData, stopCamera])
 
-  const handleFileUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file && file.type.startsWith('image/')) {
-      const photoUrl = URL.createObjectURL(file)
-      setCapturedPhoto(photoUrl)
-      setPhotoFile(file)
-      onUpdateData({ photo: file })
-    }
-  }, [onUpdateData])
 
   const retakePhoto = useCallback(() => {
     if (capturedPhoto) {
@@ -208,8 +197,8 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
           mb: 3,
           textAlign: 'left',
           color: '#6e6e73',
-          lineHeight: 1.5,
-          fontSize: '1rem',
+          lineHeight: 1.6,
+          fontSize: { xs: '1rem', sm: '1.1rem' },
         }}
       >
         Take a selfie so we can find you in event photos.
@@ -236,14 +225,14 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
           elevation={3}
           sx={{
             mb: 2,
-            borderRadius: 2,
+            borderRadius: 3,
             overflow: 'hidden',
             aspectRatio: '3/4',
             position: 'relative',
             backgroundColor: '#f5f5f5',
             width: '100%',
-            minHeight: '400px',
-            maxHeight: '500px',
+            minHeight: { xs: '480px', sm: '560px' },
+            maxHeight: { xs: '560px', sm: '640px' },
           }}
         >
           {!capturedPhoto && !isCapturing && (
@@ -254,20 +243,20 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
                 alignItems: 'center',
                 justifyContent: 'center',
                 height: '100%',
-                gap: { xs: 1.5, sm: 2 },
-                p: { xs: 2, sm: 4 },
+                gap: { xs: 2.5, sm: 3.5 },
+                p: { xs: 3, sm: 4 },
                 background: 'linear-gradient(135deg, rgba(25, 118, 210, 0.02) 0%, rgba(63, 81, 181, 0.02) 100%)',
-                minHeight: { xs: '320px', sm: '400px' },
+                minHeight: { xs: '420px', sm: '500px' },
               }}
             >
               {/* Modern Animated Face Icon */}
               <Box
                 sx={{
                   position: 'relative',
-                  mb: { xs: 1.5, sm: 2 },
-                  // 确保在小屏幕上有足够空间
+                  mb: { xs: 2, sm: 3 },
+                  // 扩大动画区域，增强视觉吸引力
                   maxWidth: '100%',
-                  maxHeight: { xs: '200px', sm: '240px' },
+                  maxHeight: { xs: '280px', sm: '320px' },
                 }}
               >
                 {/* Current Scene Data */}
@@ -283,8 +272,8 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
                           top: '50%',
                           left: '50%',
                           transform: 'translate(-50%, -50%)',
-                          width: { xs: 160, sm: 180, md: 260 },
-                          height: { xs: 200, sm: 220, md: 300 },
+                          width: { xs: 200, sm: 240, md: 300 },
+                          height: { xs: 240, sm: 280, md: 360 },
                           borderRadius: '50%',
                           background: `linear-gradient(135deg, ${currentScene.bgColor} 0%, ${currentScene.bgColor} 100%)`,
                           animation: 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
@@ -305,8 +294,8 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
                       {/* Main elliptical container - 响应式尺寸 */}
                       <Box
                         sx={{
-                          width: { xs: 140, sm: 160, md: 240 },
-                          height: { xs: 180, sm: 200, md: 280 },
+                          width: { xs: 180, sm: 220, md: 280 },
+                          height: { xs: 220, sm: 260, md: 340 },
                           borderRadius: '50%',
                           backgroundColor: '#ffffff',
                           border: `3px solid ${currentScene.color}20`,
@@ -360,41 +349,40 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
 
 
             
-              {/* Modern Action Buttons */}
-              <input
-                type="file"
-                accept="image/*"
-                ref={fileInputRef}
-                onChange={handleFileUpload}
-                style={{ display: 'none' }}
-              />
-              
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: 320, gap: 3 }}>
-                {/* Primary CTA Button */}
+              {/* Single Action Button - Centered and Prominent */}
+              <Box sx={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'center', 
+                width: '100%', 
+                maxWidth: 400, 
+                gap: { xs: 2, sm: 3 }
+              }}>
+                {/* Primary CTA Button - Enhanced */}
                 <Button
                   variant="contained"
                   size="large"
-                  startIcon={<PhotoCamera sx={{ fontSize: '1.2rem' }} />}
+                  startIcon={<PhotoCamera sx={{ fontSize: { xs: '1.3rem', sm: '1.5rem' } }} />}
                   onClick={startCamera}
                   disabled={isCapturing}
                   sx={{
                     width: '100%',
-                    minHeight: 52,
-                    borderRadius: 3,
+                    minHeight: { xs: 56, sm: 64 },
+                    borderRadius: 4,
                     textTransform: 'none',
-                    fontWeight: 600,
-                    fontSize: '1rem',
+                    fontWeight: 700,
+                    fontSize: { xs: '1.1rem', sm: '1.2rem' },
                     background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
-                    boxShadow: '0 4px 20px rgba(25, 118, 210, 0.25), 0 1px 3px rgba(0, 0, 0, 0.12)',
+                    boxShadow: '0 8px 32px rgba(25, 118, 210, 0.3), 0 2px 8px rgba(0, 0, 0, 0.15)',
                     border: 'none',
                     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                     '&:hover': {
                       background: 'linear-gradient(135deg, #1565c0 0%, #0d47a1 100%)',
-                      transform: 'translateY(-2px)',
-                      boxShadow: '0 6px 24px rgba(25, 118, 210, 0.35), 0 2px 6px rgba(0, 0, 0, 0.15)',
+                      transform: 'translateY(-3px)',
+                      boxShadow: '0 12px 40px rgba(25, 118, 210, 0.4), 0 4px 12px rgba(0, 0, 0, 0.2)',
                     },
                     '&:active': {
-                      transform: 'translateY(0px)',
+                      transform: 'translateY(-1px)',
                     },
                     '&:disabled': {
                       background: '#e0e0e0',
@@ -406,64 +394,36 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
                   {isCapturing ? 'Opening Camera...' : 'Take Selfie'}
                 </Button>
 
-                {/* Elegant Divider */}
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    width: '100%',
-                    gap: 2,
-                  }}
-                >
-                  <Box 
-                    sx={{ 
-                      flex: 1, 
-                      height: '1px', 
-                      background: 'linear-gradient(90deg, transparent 0%, #e0e0e0 50%, transparent 100%)'
-                    }} 
-                  />
+                {/* Enhanced Helper Text */}
+                <Box sx={{ textAlign: 'center', maxWidth: 350 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: '#666',
+                      fontSize: { xs: '0.9rem', sm: '1rem' },
+                      fontWeight: 500,
+                      textAlign: 'center',
+                      lineHeight: 1.5,
+                      px: 1,
+                      mb: 0.5,
+                    }}
+                  >
+                    📸 Position your face in the center
+                  </Typography>
                   <Typography
                     variant="body2"
                     sx={{
                       color: '#999',
-                      fontSize: '0.875rem',
-                      fontWeight: 500,
+                      fontSize: '0.85rem',
+                      fontWeight: 400,
+                      textAlign: 'center',
+                      lineHeight: 1.4,
                       px: 1,
                     }}
                   >
-                    or
+                    Make sure you're in good lighting for best results
                   </Typography>
-                  <Box 
-                    sx={{ 
-                      flex: 1, 
-                      height: '1px', 
-                      background: 'linear-gradient(90deg, transparent 0%, #e0e0e0 50%, transparent 100%)'
-                    }} 
-                  />
                 </Box>
-
-                {/* Secondary Upload Button */}
-                <Button
-                  variant="text"
-                  onClick={() => fileInputRef.current?.click()}
-                  startIcon={<Upload sx={{ fontSize: '1rem' }} />}
-                  sx={{
-                    color: '#1976d2',
-                    fontSize: '0.95rem',
-                    fontWeight: 500,
-                    textTransform: 'none',
-                    borderRadius: 2,
-                    px: 3,
-                    py: 1.5,
-                    transition: 'all 0.2s ease',
-                    '&:hover': {
-                      backgroundColor: 'rgba(25, 118, 210, 0.04)',
-                      transform: 'translateY(-1px)',
-                    },
-                  }}
-                >
-                  Upload from device
-                </Button>
               </Box>
             </Box>
           )}
@@ -487,7 +447,7 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
               <Box
                 sx={{
                   position: 'absolute',
-                  top: '45%', // 符合举手自拍的实际人脸位置
+                  top: '45%',
                   left: '50%',
                   transform: 'translate(-50%, -50%)',
                   width: 220,
@@ -495,6 +455,17 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
                   border: '3px dashed rgba(255,255,255,0.9)',
                   borderRadius: '50%',
                   pointerEvents: 'none',
+                  animation: 'guidePulse 2s ease-in-out infinite',
+                  '@keyframes guidePulse': {
+                    '0%, 100%': {
+                      borderColor: 'rgba(255,255,255,0.7)',
+                      transform: 'translate(-50%, -50%) scale(1)',
+                    },
+                    '50%': {
+                      borderColor: 'rgba(255,255,255,0.9)',
+                      transform: 'translate(-50%, -50%) scale(1.02)',
+                    },
+                  },
                 }}
               />
 
@@ -567,50 +538,73 @@ export const FaceRegistrationStep = ({ formData, onUpdateData, onNext }: StepPro
                 </Box>
               )}
 
-              {/* Capture Button - Instagram Style */}
+              {/* Enhanced Capture Button Area */}
               <Box
                 sx={{
                   position: 'absolute',
-                  bottom: 30,
+                  bottom: 20,
                   left: '50%',
                   transform: 'translateX(-50%)',
                   display: 'flex',
+                  flexDirection: 'column',
                   alignItems: 'center',
-                  justifyContent: 'center',
+                  gap: 1,
                 }}
               >
                 {/* Outer Ring */}
                 <Box
                   onClick={capturePhoto}
                   sx={{
-                    width: 80,
-                    height: 80,
-                    border: '4px solid rgba(255, 255, 255, 0.9)',
+                    width: 90,
+                    height: 90,
+                    border: '5px solid rgba(255, 255, 255, 0.9)',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     cursor: 'pointer',
-                    transition: 'all 0.2s ease',
+                    transition: 'all 0.3s ease',
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+                    animation: 'breathe 3s ease-in-out infinite',
                     '&:hover': {
-                      transform: 'scale(1.05)',
-                      border: '4px solid rgba(255, 255, 255, 1)',
+                      transform: 'scale(1.08)',
+                      border: '5px solid rgba(255, 255, 255, 1)',
+                      boxShadow: '0 6px 25px rgba(0, 0, 0, 0.4)',
                     },
                     '&:active': {
                       transform: 'scale(0.95)',
+                    },
+                    '@keyframes breathe': {
+                      '0%, 100%': {
+                        transform: 'scale(1)',
+                      },
+                      '50%': {
+                        transform: 'scale(1.03)',
+                      },
                     },
                   }}
                 >
                   {/* Inner Circle */}
                   <Box
                     sx={{
-                      width: 60,
-                      height: 60,
+                      width: 68,
+                      height: 68,
                       backgroundColor: 'rgba(255, 255, 255, 0.95)',
                       borderRadius: '50%',
                       transition: 'all 0.2s ease',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
-                  />
+                  >
+                    <PhotoCamera 
+                      sx={{ 
+                        fontSize: 24, 
+                        color: '#1976d2',
+                        opacity: 0.8,
+                      }} 
+                    />
+                  </Box>
                 </Box>
               </Box>
 

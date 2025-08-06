@@ -247,52 +247,6 @@ class ApiService {
     }
   }
 
-  // Legacy registration method (kept for backward compatibility)
-  async registerWithPhoto(data: RegisterRequest): Promise<RegisterResponse> {
-    // Create FormData
-    const formData = new FormData()
-    formData.append('name', data.name)
-    formData.append('email', data.email)
-    if (data.phone) {
-      formData.append('phone', data.phone)
-    }
-    if (data.instagram) {
-      formData.append('instagram', data.instagram)
-    }
-    if (data.serviceConsent !== undefined) {
-      formData.append('serviceConsent', data.serviceConsent.toString())
-    }
-    formData.append('photo', data.photo)
-
-    const response = await fetch(`${this.baseUrl}/api/register-with-photo`, {
-      method: 'POST',
-      body: formData,
-    })
-
-    const result = await response.json()
-
-    // Standard way: success returns data, failure throws error
-    if (response.ok) {
-      // HTTP 200-299 = success, return data directly
-      return {
-        user_id: result.user_id,
-        message: result.message || 'Registration successful',
-      }
-    } else {
-      // Handle structured error response from backend
-      let errorMessage = `Server error: ${response.status}`
-      
-      if (result.messages && Array.isArray(result.messages) && result.messages.length > 0) {
-        errorMessage = result.messages[0]
-      } else if (result.error) {
-        errorMessage = result.error
-      } else if (result.message) {
-        errorMessage = result.message
-      }
-      
-      throw new Error(errorMessage)
-    }
-  }
 
   // New event-based registration method
   async registerForEvent(eventSlug: string, data: RegisterRequest): Promise<EventRegistrationResponse> {

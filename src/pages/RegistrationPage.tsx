@@ -90,9 +90,7 @@ export const RegistrationPage = () => {
         }
 
         // Choose API method based on whether we have an event slug
-        if (slug) {
-          // Event-based registration
-          const response = await apiService.registerForEvent(slug, {
+          const response = await apiService.registerForEvent(slug || '', {
             name: formData.name,
             email: formData.email,
             phone: formData.phone || '',
@@ -101,19 +99,6 @@ export const RegistrationPage = () => {
             serviceConsent: formData.serviceConsent,
           })
           console.log('Event registration successful:', response.message)
-        } else {
-          // Legacy registration (fallback)
-          const response = await apiService.registerWithPhoto({
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone || '',
-            instagram: formData.instagram || '',
-            photo: formData.photo,
-            serviceConsent: formData.serviceConsent,
-          })
-          console.log('Registration successful:', response.message)
-        }
-
         setCurrentStep(4) // Go to completion step
         
       } catch (error) {
